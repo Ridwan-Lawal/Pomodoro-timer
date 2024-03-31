@@ -1,9 +1,25 @@
+import { IoSettingsSharp } from "react-icons/io5";
+
 import TimerTab from "../components/homepages/TimerTab";
+import { Outlet, useNavigate } from "react-router-dom";
+import Counters from "../components/homepages/Counters";
 
 function Homepage() {
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <TimerTab />
+    <div className="flex flex-col items-center justify-between  h-screen  ">
+      <div className="flex flex-col items-center ">
+        <h1 className="font-bold text-[32px] text-lightblue pb-11">pomodoro</h1>
+        <TimerTab />
+      </div>
+
+      <Counters />
+
+      <button className="mt-16" onClick={() => navigate("/settings")}>
+        <IoSettingsSharp className="text-gray-400 text-3xl" />
+      </button>
+      <Outlet />
     </div>
   );
 }
