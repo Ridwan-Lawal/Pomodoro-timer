@@ -19,11 +19,13 @@ import { useTimer } from "./contexts/TimerContext";
 */
 
 function App() {
-  const { font } = useTimer();
+  const { font, isSettingsApplied, currentFont } = useTimer();
 
   return (
     <div
-      className={`${font} bg-darkestblue min-h-screen overflow-auto  py-16  `}
+      className={`${
+        isSettingsApplied ? font : currentFont
+      } bg-darkestblue min-h-screen overflow-auto  py-16  `}
     >
       <BrowserRouter>
         <Routes>

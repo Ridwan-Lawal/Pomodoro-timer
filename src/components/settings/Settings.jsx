@@ -22,6 +22,7 @@ function Settings() {
         >
           <button
             onClick={() => {
+              dispatch({ type: "settings/applied" });
               navigate("/");
             }}
             className="bg-red text-white py-2.5 px-10 font-semibold   rounded-3xl"

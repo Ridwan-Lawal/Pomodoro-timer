@@ -3,9 +3,12 @@ import { IoSettingsSharp } from "react-icons/io5";
 import TimerTab from "../components/homepages/TimerTab";
 import { Outlet, useNavigate } from "react-router-dom";
 import Counters from "../components/homepages/Counters";
+import { useTimer } from "../contexts/TimerContext";
 
 function Homepage() {
   const navigate = useNavigate();
+
+  const { dispatch } = useTimer();
 
   return (
     <div className="flex flex-col items-center justify-between  h-screen  ">
@@ -16,7 +19,13 @@ function Homepage() {
 
       <Counters />
 
-      <button className="mt-16" onClick={() => navigate("/settings")}>
+      <button
+        className="mt-16"
+        onClick={() => {
+          dispatch({ type: "settings/applied" });
+          navigate("/settings");
+        }}
+      >
         <IoSettingsSharp className="text-gray-400 text-3xl" />
       </button>
       <Outlet />

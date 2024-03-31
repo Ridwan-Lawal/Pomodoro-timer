@@ -20,6 +20,7 @@ const initialValue = {
   font: "font-kumbh",
   color: "bg-red",
   isSettingsApplied: false,
+  currentFont: "font-kumbh",
 };
 
 function reducer(state, action) {
@@ -90,6 +91,13 @@ function reducer(state, action) {
     case "settings/colorchange":
       return { ...state, color: action.payload };
 
+    case "settings/applied":
+      return {
+        ...state,
+        isSettingsApplied: !state.isSettingsApplied,
+        currentFont: state.isSettingsApplied ? state.font : state.currentFont,
+      };
+
     default:
       throw new Error("Could not find the action type");
   }
@@ -113,6 +121,8 @@ function TimerProvider({ children }) {
     tabClicked,
     font,
     color,
+    isSettingsApplied,
+    currentFont,
   } = state;
 
   console.log(tabClicked);
@@ -168,6 +178,8 @@ function TimerProvider({ children }) {
         tabClicked,
         font,
         color,
+        isSettingsApplied,
+        currentFont,
       }}
     >
       {children}
