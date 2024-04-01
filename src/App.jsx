@@ -4,20 +4,6 @@ import PageNotFound from "./Pages/PageNotFound";
 import Settings from "./components/settings/Settings";
 import { useTimer } from "./contexts/TimerContext";
 
-/*
-
-- i have created the counter for the pomdoro
-===== todo
-- create the counter for the short break and long break
-- Use conditionals and state to handle them,
-- add the total number of seconds for each counter in
-  in the counter progress bar
-- handle the settings
-
-
-
-*/
-
 function App() {
   const { font, isSettingsApplied, currentFont } = useTimer();
 

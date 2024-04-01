@@ -6,19 +6,29 @@ const DEFAULT_POMODORO = 15;
 const DEFAULT_SHORT_BREAK = 5;
 const DEFAULT_LONG_BREAK = 10;
 
+// stored Data From Local Storage;
+const {
+  pomodoroToSec,
+  shortBreakToSec,
+  longBreakToSec,
+  tabClicked,
+  font,
+  color,
+} = JSON.parse(localStorage.getItem("timerData"));
+
 const initialValue = {
   pomodoro: DEFAULT_POMODORO,
   shortBreak: DEFAULT_SHORT_BREAK,
   longBreak: DEFAULT_LONG_BREAK,
-  longBreakToSec: DEFAULT_LONG_BREAK * 60,
-  pomodoroToSec: DEFAULT_POMODORO * 60,
-  shortBreakToSec: DEFAULT_SHORT_BREAK * 60,
+  longBreakToSec,
+  pomodoroToSec,
+  shortBreakToSec,
   isPomodoroStart: false,
   isShortBreakStart: false,
   isLongBreakStart: false,
-  tabClicked: "pomodoro",
-  font: "font-kumbh",
-  color: "bg-red",
+  tabClicked,
+  font,
+  color,
   isSettingsApplied: false,
   currentFont: "font-kumbh",
 };
@@ -29,16 +39,25 @@ function reducer(state, action) {
       return {
         ...state,
         pomodoro: +action.payload,
+        isPomodoroStart: false,
+        isShortBreakStart: false,
+        isLongBreakStart: false,
       };
     case "settings/shortbreak":
       return {
         ...state,
         shortBreak: +action.payload,
+        isPomodoroStart: false,
+        isShortBreakStart: false,
+        isLongBreakStart: false,
       };
     case "settings/longbreak":
       return {
         ...state,
         longBreak: +action.payload,
+        isPomodoroStart: false,
+        isShortBreakStart: false,
+        isLongBreakStart: false,
       };
 
     case "settings/apply":
@@ -125,7 +144,7 @@ function TimerProvider({ children }) {
     currentFont,
   } = state;
 
-  console.log(tabClicked);
+  //   Effect for starting and pausing timer
   useEffect(
     function () {
       let pomodoroTimer;
@@ -160,6 +179,24 @@ function TimerProvider({ children }) {
       };
     },
     [isPomodoroStart, isLongBreakStart, isShortBreakStart]
+  );
+
+  // Effect for storing timer in the local storage
+  useEffect(
+    function () {
+      localStorage.setItem(
+        "timerData",
+        JSON.stringify({
+          pomodoroToSec,
+          shortBreakToSec,
+          longBreakToSec,
+          tabClicked,
+          font,
+          color,
+        })
+      );
+    },
+    [pomodoroToSec, shortBreakToSec, longBreakToSec, tabClicked, font, color]
   );
 
   return (
