@@ -13,6 +13,7 @@ function SettingTimeInput({ htmlFor = "", value, onChange }) {
         value={value}
         onChange={onChange}
         max="59"
+        min="0"
         id={htmlFor}
         className="p-2 appearance-none text-darkestblue font-semibold w-full text-[15px] rounded-md focus:outline-none bg-grays"
       />

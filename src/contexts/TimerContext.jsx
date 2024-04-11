@@ -1,34 +1,32 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from "react";
 
 const DEFAULT_POMODORO = 15;
 const DEFAULT_SHORT_BREAK = 5;
 const DEFAULT_LONG_BREAK = 10;
 
 // stored Data From Local Storage;
-const {
-  pomodoroToSec,
-  shortBreakToSec,
-  longBreakToSec,
-  tabClicked,
-  font,
-  color,
-} = JSON.parse(localStorage.getItem("timerData"));
 
 const initialValue = {
   pomodoro: DEFAULT_POMODORO,
   shortBreak: DEFAULT_SHORT_BREAK,
   longBreak: DEFAULT_LONG_BREAK,
-  longBreakToSec,
-  pomodoroToSec,
-  shortBreakToSec,
+  longBreakToSec: DEFAULT_LONG_BREAK * 60,
+  pomodoroToSec: DEFAULT_POMODORO * 60,
+  shortBreakToSec: DEFAULT_SHORT_BREAK * 60,
   isPomodoroStart: false,
   isShortBreakStart: false,
   isLongBreakStart: false,
-  tabClicked,
-  font,
-  color,
+  tabClicked: "pomodoro",
+  font: "font-kumbh",
+  color: "bg-cyan",
   isSettingsApplied: false,
   currentFont: "font-kumbh",
 };
@@ -117,6 +115,14 @@ function reducer(state, action) {
         currentFont: state.isSettingsApplied ? state.font : state.currentFont,
       };
 
+    case "timerData/fromStorage":
+      return {
+        ...action.payload,
+        isPomodoroStart: false,
+        isLongBreakStart: false,
+        isShortBreakStart: false,
+      };
+
     default:
       throw new Error("Could not find the action type");
   }
@@ -184,43 +190,57 @@ function TimerProvider({ children }) {
   // Effect for storing timer in the local storage
   useEffect(
     function () {
-      localStorage.setItem(
-        "timerData",
-        JSON.stringify({
-          pomodoroToSec,
-          shortBreakToSec,
-          longBreakToSec,
-          tabClicked,
-          font,
-          color,
-        })
-      );
+      if (state === initialValue) return;
+      localStorage.setItem("timerData", JSON.stringify(state));
     },
-    [pomodoroToSec, shortBreakToSec, longBreakToSec, tabClicked, font, color]
+    [state]
   );
 
+  // effect for getting the timer from local storage
+  useEffect(function () {
+    const timerData = JSON.parse(localStorage.getItem("timerData"));
+    if (!timerData) return;
+    dispatch({ type: "timerData/fromStorage", payload: timerData });
+  }, []);
+
+  const values = useMemo(() => {
+    return {
+      pomodoro,
+      shortBreak,
+      longBreak,
+      dispatch,
+      isPomodoroStart,
+      pomodoroToSec,
+      isLongBreakStart,
+      isShortBreakStart,
+      longBreakToSec,
+      shortBreakToSec,
+      tabClicked,
+      font,
+      color,
+      isSettingsApplied,
+      currentFont,
+    };
+  }, [
+    pomodoro,
+    shortBreak,
+    longBreak,
+    dispatch,
+    isPomodoroStart,
+    pomodoroToSec,
+    isLongBreakStart,
+    isShortBreakStart,
+    longBreakToSec,
+    shortBreakToSec,
+    tabClicked,
+    font,
+    color,
+    isSettingsApplied,
+    currentFont,
+  ]);
+
   return (
-    <TimerContext.Provider
-      value={{
-        pomodoro,
-        shortBreak,
-        longBreak,
-        dispatch,
-        isPomodoroStart,
-        pomodoroToSec,
-        isLongBreakStart,
-        isShortBreakStart,
-        longBreakToSec,
-        shortBreakToSec,
-        tabClicked,
-        font,
-        color,
-        isSettingsApplied,
-        currentFont,
-      }}
-    >
-      {children}
-    </TimerContext.Provider>
+    <TimerContext.Provider value={values}>{children}</TimerContext.Provider>
   );
 }
 
