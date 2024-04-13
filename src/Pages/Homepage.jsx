@@ -11,7 +11,7 @@ function Homepage() {
   const { dispatch } = useTimer();
 
   return (
-    <div className="flex flex-col items-center justify-around  min-h-screen border-2  ">
+    <div className="flex flex-col items-center justify-around  h-[97vh]   ">
       <div className="flex flex-col items-center ">
         <h1 className="font-bold text-[32px] text-lightblue pb-11">pomodoro</h1>
         <TimerTab />
