@@ -11,7 +11,7 @@ function App() {
     <div
       className={`${
         isSettingsApplied ? font : currentFont
-      } bg-darkestblue min-h-screen overflow-auto  py-16  `}
+      } bg-darkestblue min-h-screen overflow-auto    `}
     >
       <BrowserRouter>
         <Routes>
